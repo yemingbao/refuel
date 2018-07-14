@@ -1,0 +1,188 @@
+{extend name="Base/index" /} 
+{block name='title'}
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="{:url('index/index')}">首页</a>
+							</li>
+
+							<li>
+								展示
+							</li>
+							<li class="active"><a href="{:url('label/index')}">标签添加</a></li>
+						</ul><!-- .breadcrumb -->
+{/block}
+{block name='search'}{/block}
+{block name='content'}
+<link rel="stylesheet" href="__STATIC__/css/tinyImgUpload.css">
+<style type="text/css">
+	.bkb1 {
+		position: relative;
+		background: rgba(120,120,120,0.5);
+		margin-right: 10px;
+		z-index: 999;
+		width: 200px;
+		height: 200px;
+		font-size: 22px;
+		text-align: center;
+	}
+	.bkb2 {
+		background:white;
+		width: 30px;
+		height: 30px;
+		position:absolute;
+		margin-left:160px;
+		margin-top: 10px;
+		border-radius:50%;
+		cursor: pointer;
+	}
+
+</style>
+<div class="page-content">
+						<div class="page-header">
+							<h1>
+								展示
+								<small>
+									<i class="icon-double-angle-right"></i>
+									添加标签
+								</small>
+							</h1>
+						</div><!-- /.page-header -->
+
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+
+								<form class="form-horizontal" role="form" enctype ="multipart/form-data" action="{:url('label/add')}" method='post' id="oForm">
+						       <div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 一级分类</label>
+										<div class="col-sm-9">
+											<select name="one_cat_id" id="one_cat_id">
+												<option value="0">请选择分类</option>
+												{volist name='cat_list' id="cat"}
+												<option value="{$cat.cat_id}">{$cat.name}</option>
+												{/volist}
+											</select>
+                                        <span ></span>
+										</div>
+								</div>
+								 <div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 二级分类</label>
+										<div class="col-sm-9">
+											<select name="two_cat_id" id="two_cat_id">
+												<option value="0">请选择分类</option>
+											</select>
+                                        <span ></span>
+										</div>
+								</div>
+								<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 标签名 </label>
+										<div class="col-sm-9">
+											<input type="text"  class="col-xs-10 col-sm-5" name='name' value=''>
+                                        <span ></span>
+										</div>
+									</div>
+							
+							
+                              
+								<div class="space-4"></div>	
+								<div class="clearfix form-actions">
+									<div class="col-md-offset-3 col-md-9">
+										<button class="btn btn-label" type="submit" id='dian'>
+											<i class="icon-ok bigger-110"></i>
+											提交
+										</button>
+										&nbsp; &nbsp; &nbsp;
+										<a href="{:url('label/index')}">
+										<button class="btn" id = 'button' type='button'>
+
+											<i class="icon-undo bigger-110"></i>
+											返回
+										</button>
+										</a>
+										
+									</div>
+								</div>
+							</form>
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+					</div>
+<script src="__STATIC__/js/tinyImgUpload.js"></script>
+<script type="text/javascript">
+    var options = {
+        url: "{:url('upload/imgUpload')}",
+        path:'label',
+        onSuccess: function (res) {
+            data = eval('(' + res + ')');
+            if(data.code==1) {
+                alert('图片上传成功');
+                $('.img-thumb').each(function(){
+                    $(this).remove();
+                });
+                html = '';
+                for(var i=0;i<data.data.length;i++) {
+                    html += '<div class="bkb1"><div class="bkb2" onclick="delImg(this)">X</div>';
+                    html += '<img height="200" width="200" src="'+"{$base_dir}"+data.data[i]+'" ><input type="hidden" name="thumb_url[]" value="'+data.data[i]+'"></div>';
+                }
+                $('#tt').before(html);
+
+            } else {
+                alert('图片上传失败');
+            }
+        },
+        onFailure: function (res) {
+            alert('网络繁忙，请稍后再试');
+        }
+    };
+    var upload = tinyImgUpload('#imgselect', options);
+    var uploadImg = tinyImgUpload('#imgselect', options);
+    $('#imgselect').onclick = function (e) {
+        upload();
+    }
+    $('#imgupload').click(function(e){
+        uploadImg();
+    })
+
+
+    function delImg(obj)
+    {
+        var delimg = $('#delimg').val();
+        console.log(1,delimg);
+        var add_delimg = $(obj).next().attr('src');
+        if( delimg == "") {
+            $('#delimg').val(add_delimg);
+        } else {
+            delimg += ','+add_delimg;
+            $('#delimg').val(delimg);
+        }
+        $(obj).parent().remove();
+    }
+
+</script>
+<script>
+	  $('#one_cat_id').change(function(){
+
+        var one_cat_id = $('select[name="one_cat_id"]').val();
+
+        var url = "{:url('label/getCatList')}";
+        $.ajax({
+            type:'post',
+            url:url,
+            data:{'one_cat_id':one_cat_id},
+            success: function(res){
+                if (res) {
+                    html = '<option value="">请选择</option>';
+                    $(res.two_cat_list).each(function(index,element){
+                        html += '<option value="'+element.cat_id+'">'+element.name+'</option>';
+                    });
+                    $('#two_cat_id').html(html);
+                }
+            },
+            error:function(){
+                alert("服务器繁忙, 请联系管理员!");
+            }
+        });
+    });
+
+</script>
+{/block}

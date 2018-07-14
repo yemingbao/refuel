@@ -1,0 +1,216 @@
+{extend name="Base/index" /} 
+{block name='content'}
+<div class="page-header">
+		<h1>
+			个人中心
+			<small>
+				<i class="icon-double-angle-right"></i>
+				个人信息
+			</small>
+		</h1>
+</div>
+<div class='col-xs-12'>
+<form class="form-horizontal" role="form" action="{:url('personal/edit')}" method='post'>
+	
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">邮箱:</label>
+
+			<div class="col-sm-9">
+				{$arr.mail}
+			</div>
+		</div>
+		<div class="space-4"></div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">小程序标题:</label>
+
+			<div class="col-sm-9">
+				<input type="text" id="form-field-1" placeholder="用户名" class="col-xs-10 col-sm-5"  value='{$arr.name}' data-font='请输入3到6位用户名' name='name'>
+				<span class="help-inline col-xs-12 col-sm-7" >
+					
+				</span>
+			</div>
+		</div>
+		<div class="space-4"></div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right" for="form-field-1" >手机号:</label>
+
+			<div class="col-sm-9">
+				<input type="text" id="form-field-1" placeholder="手机号" class="col-xs-10 col-sm-5" value='{$arr.admin_phone}' data-font='请输入正确的手机号' name='admin_phone'>
+				<span class="help-inline col-xs-12 col-sm-7" >	</span>
+			</div>
+		</div>
+        <div class="space-4"></div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label no-padding-right" for="form-field-1">积分:</label>
+
+            <div class="col-sm-9">
+                <input  type="text" class="col-xs-10 col-sm-5" id="form-input-readonly" value="{$arr.sign_integral}" name='sign_integral'>
+                    <span class="help-inline col-xs-12 col-sm-7" >  </span>
+            </div>
+        </div>
+         <div class="space-4"></div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"></label>
+            <div class="col-sm-9">
+                    <span class="help-inline col-xs-12 col-sm-7" style="color:red;" > 温馨提示：以下为微信和小程序参数，修改有风险，请慎重处理 </span>
+            </div>
+        </div>
+		<div class="space-4"></div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">微信ID:</label>
+
+			<div class="col-sm-9">
+				<input type="text" id="form-field-1" placeholder="wechat_id" class="col-xs-10 col-sm-5" value='{$arr.wechat_id}' name='wechat_id'>
+				<span class="help-inline col-xs-12 col-sm-7" >	</span>
+			</div>
+		</div>
+		<div class="space-4"></div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">微信密钥:</label>
+
+			<div class="col-sm-9">
+				<input type="password" id="form-field-1" placeholder="wechat_key" class="col-xs-10 col-sm-5" value='{$arr.wechat_key}' name='wechat_key'>
+					<span class="help-inline col-xs-12 col-sm-7" >	</span>
+			</div>
+		</div>
+		<div class="space-4"></div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">小程序商户号:</label>
+
+			<div class="col-sm-9">
+				<input type="text" id="form-field-1" placeholder="mer_num" class="col-xs-10 col-sm-5" value='{$arr.mer_num}' name='mer_num'>
+					<span class="help-inline col-xs-12 col-sm-7" >	</span>
+			</div>
+		</div>
+		<div class="space-4"></div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">小程序密钥:</label>
+
+			<div class="col-sm-9">
+				<input type="password" id="form-field-1" placeholder="mer_key" class="col-xs-10 col-sm-5" value='{$arr.mer_key}' name='mer_key'>
+					<span class="help-inline col-xs-12 col-sm-7" >	</span>
+			</div>
+		</div>
+		
+		<div class="space-4"></div>
+		<div class="clearfix form-actions">
+			<div class="col-md-offset-3 col-md-9">
+				<button class="btn btn-info" type="submit">
+					<i class="icon-ok bigger-110"></i>
+					提交
+				</button>
+
+			</div>
+		</div>
+
+								
+
+		
+									
+</form>
+<script type="text/javascript">
+        var uflag = false;
+        var oflag = false;
+        var yflag = false;
+        var rflag = false;
+        $('input').focus(function(){
+
+            var msg = $(this).attr('data-font');
+            $(this).next().html(msg);
+            $(this).next().css('color','#666');
+        })
+        //判断账号
+      $('[name=user_user]').blur(function(){
+            //判断账号名是否存在，
+            var p = /^\w{3,6}$/;
+            var user_user = $(this).val();
+            var t = $(this);
+            //判断正则
+            if(p.test(user_user)){  
+                $.post("{:url('home/login/ajax')}",{'manager_user':user_user},function(data){
+                   
+                    //账号名如果存在就存在
+                        if(data==0){
+                            t.next().html('账号名已存在');
+                            t.next().css('color','red');
+                            uflag = false;
+                        }else{
+                            t.next().html('');
+                            
+                            uflag = true;
+                        }
+                },'json');
+            }else{
+                $(this).next().html('账号名格式错误');
+                $(this).next().css('color','red');
+                uflag = false;
+            }
+        })
+        //判断邮箱
+         $('input[name=email]').blur(function(){
+            //判断邮箱是否存在，
+            var p=/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/;
+            var email = $(this).val();
+            var t = $(this);
+            //判断正则
+            if(p.test(email)){  
+                $.post("{:url('home/login/ajax')}",{'manager_user':email},function(data){
+                    
+                        if(data==0){
+                            t.next().child().html('邮箱已存在');
+                            t.next().child().css('color','red');
+                            yflag = false;
+                        }else{
+                            t.next().child().html('');
+                            yflag = true;
+                        }
+                },'json');
+            }else{
+                $(this).next().html('邮箱格式错误');
+                $(this).next().css('color','red');
+                yflag = false;
+            }
+        })
+         //判断密码,手机号，用户名
+    $('[name=user_pwd],[name=user_phone],[name=user_name]').blur(function(){
+            var v = $(this).val(); 
+            eval('var p='+$(this).attr('p'));
+        if(p.test(v)){
+            $(this).next().html('');   
+            oflag = true;
+        }else{
+            $(this).next().html('格式错误');
+            $(this).next().css('color','red');  
+            oflag = false;
+        }
+            
+    })
+    //判断密码和确认密码
+    $('[name=user_qrpass]').blur(function(){
+        $opass = $('[name=user_pwd]').val();
+        $npass = $(this).val();
+        if($npass == $opass){
+            $(this).next().html('');
+            $(this).next().css('color','red');
+            rflag = true;
+        }else{
+            $(this).next().html('两次密码不一致');
+            $(this).next().css('color','red');
+            rflag = false;
+        }
+    })
+    //判断提交
+    $('#box-register').submit(function(){
+        $('input').trigger('blur');
+        //return false;
+        if(uflag && oflag && yflag && rflag){
+            return true;
+        }else{
+            return false;
+        }
+    })
+    </script>
+</div>
+
+									
+{/block}

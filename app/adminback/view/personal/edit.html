@@ -1,0 +1,151 @@
+{extend name="Base/index" /} 
+
+{block name='content'}
+<div class="page-header">
+		<h1>
+			个人中心
+			<small>
+				<i class="icon-double-angle-right"></i>
+				个人信息
+			</small>
+		</h1>
+</div>
+<div class='col-xs-12'>
+<form class="form-horizontal" role="form" action="{:url('personal/editdo')}" method='post' id='form'>
+		
+		
+		
+		
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right" for="form-field-1" >旧密码:</label>
+
+			<div class="col-sm-9">
+				<input type="text" id="form-field-1" placeholder="旧密码" class="col-xs-10 col-sm-5" value='' data-font='请输入正确的密码' name='opass'>
+				<span class="help-inline col-xs-12 col-sm-7" >	</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right" for="form-field-1" >新密码:</label>
+
+			<div class="col-sm-9">
+				<input type="text" id="form-field-1" placeholder="新密码" class="col-xs-10 col-sm-5" value='' data-font='请输入正确的密码' name='npass'>
+				<span class="help-inline col-xs-12 col-sm-7" >	</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right" for="form-field-1" >确认密码:</label>
+
+			<div class="col-sm-9">
+
+				<input type="text" id="form-field-1" placeholder="确认密码" class="col-xs-10 col-sm-5" value='' data-font='请输入正确的密码' name='qrpass'>
+				<span class="help-inline col-xs-12 col-sm-7" >	</span>
+			</div>
+		</div>
+		
+		
+		
+		<div class="space-4"></div>
+		<div class="clearfix form-actions">
+			<div class="col-md-offset-3 col-md-9">
+				<button class="btn btn-info" type="submit">
+					<i class="icon-ok bigger-110"></i>
+					提交
+				</button>
+
+			</div>
+		</div>
+
+								
+
+		
+									
+</form>
+<script type="text/javascript">
+        var uuflag = false;
+        var oflag = false;
+        var yflag = false;
+        $('input').focus(function(){
+            var msg = $(this).val();
+
+         if(msg==''){
+				 $(this).next().html('不能为空');
+           		 $(this).next().css('color','#D15B47');
+           		 uuflag=false;
+            }else{
+            	 $(this).next().html('');
+            	 uuflag=true;
+            }
+           
+        })
+        //判断账号
+      $('input[name=opass]').blur(function(){
+       	var p = $(this).val();
+       	if(p==''){
+       			 $(this).next().html('不能为空');
+           		 $(this).next().css('color','#D15B47');
+       	}else{
+       		var t=$(this);
+       		 $.post("{:url('personal/ajaxs')}",{'pass':p},function(data){
+                   if(data == '1'){
+                   	t.next().html('');
+                   	 oflag = true;
+                   }else{
+                   	t.next().html('密码错误');
+           			t.next().css('color','#D15B47');
+           			 oflag = false;
+                   }
+                },'json');
+       	}
+               
+           
+        })
+        $('input[name=npass]').blur(function(){
+        	var zhi = $(this).val();
+        	if(zhi == ''){
+        		 $(this).next().html('不能为空');
+           		 $(this).next().css('color','#D15B47');
+           		}else{
+           			 $(this).next().html('');
+           		 $(this).next().css('color','#D15B47');
+           		}
+        })
+    //判断密码和确认密码
+    $('input[name=qrpass]').blur(function(){
+   
+        $npass = $('input[name=npass]').val();
+        if($npass ==''){
+        	//为空
+        	$('input[name=npass]').next().html('请先填写新密码');
+        	$('input[name=npass]').next().css('color','#D15B47');
+        	yflag=false;
+        }else{
+        	//不为空
+        	$qrpass = $('input[name=qrpass]').val();
+    
+        	if($npass == $qrpass){
+        		$('input[name=npass]').next().html('');
+        		$('input[name=qrpass]').next().html('');
+        		yflag=true;
+        	}else{
+        		$('input[name=qrpass]').next().html('两次密码不一致');
+        		$('input[name=qrpass]').next().css('color','#D15B47');
+        		yflag=false;
+        	}
+        }
+   
+    })
+    //判断提交
+    
+    $('.form-horizontal').submit(function(){
+        $('input').trigger('blur');
+        if(oflag && yflag){
+            return true;
+        }else{
+            return false;
+        }
+    })
+    </script>
+</div>
+
+									
+{/block}

@@ -1,0 +1,254 @@
+{extend name="Base/index" /} 
+{block name='title'}
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="{:url('index/index')}">首页</a>
+							</li>
+
+							<li>
+								展示
+							</li>
+							<li class="active"><a href="{:url('banners/index')}">发布信息</a></li>
+						</ul><!-- .breadcrumb -->
+{/block}
+{block name='search'}{/block}
+{block name='content'}
+<link rel="stylesheet" href="__STATIC__/css/tinyImgUpload.css">
+<style type="text/css">
+	.bkb1 {
+		position: relative;
+		background: rgba(120,120,120,0.5);
+		margin-right: 10px;
+		z-index: 999;
+		width: 200px;
+		height: 200px;
+		font-size: 22px;
+		text-align: center;
+	}
+	.bkb2 {
+		background:white;
+		width: 30px;
+		height: 30px;
+		position:absolute;
+		margin-left:160px;
+		margin-top: 10px;
+		border-radius:50%;
+		cursor: pointer;
+	}
+
+</style>
+<div class="page-content">
+						<div class="page-header">
+							<h1>
+								展示
+								<small>
+									<i class="icon-double-angle-right"></i>
+									添加发布信息
+								</small>
+							</h1>
+						</div><!-- /.page-header -->
+
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+
+								<form class="form-horizontal" role="form" enctype ="multipart/form-data" action="{:url('info/edit')}" method='post' id="oForm">
+									<input type="hidden" value="{$list.info_id}" name="id" >
+						        <div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 一级分类</label>
+										<div class="col-sm-9">
+											<select name="one_cat_id" id="one_cat_id">
+												<option value="{$list['one_cat_id']}">{$list['one_cat_name']}</option>
+												<option value="0">请选择分类</option>
+												{volist name='cat_list' id="cat"}
+												<option value="{$cat.cat_id}">{$cat.name}</option>
+												{/volist}
+											</select>
+                                        <span ></span>
+										</div>
+								</div>
+								 <div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 二级分类</label>
+										<div class="col-sm-9">
+											<select name="two_cat_id" id="two_cat_id">
+												{if condition="empty($list['two_cat_id'])"}
+                                                    <option value="0">请选择分类</option>
+												{else/}
+                                                    <option value="{$list['two_cat_id']}">{$list['two_cat_name']}</option>
+                                                    <option value="0">请选择分类</option>
+												{/if}
+												
+											
+											</select>
+                                        <span ></span>
+										</div>
+								</div>
+								<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 用户名</label>
+										<div class="col-sm-9">
+											<select name="user_id">
+												<option value="{$list.user_id}">{$list.nickname}</option>
+												<option value="0">请选择分类</option>
+												{volist name='user_list' id="user"}
+												<option value="{$user.user_id}">{$user.nickname}</option>
+												{/volist}
+											</select>
+                                        <span ></span>
+										</div>
+								</div>
+								<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 联系人 </label>
+										<div class="col-sm-9">
+											<input type="text"  class="col-xs-10 col-sm-5" name='linkman' value='{$list.linkman}'>
+                                        <span ></span>
+										</div>
+									</div>
+								<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 手机号码</label>
+										<div class="col-sm-9">
+											<input type="text"   class="col-xs-10 col-sm-5" name='mobile' value='{$list.mobile}'>
+                                        <span ></span>
+										</div>
+								</div>
+							  <div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 展示图片</label>
+										<div class="col-md-offset-3 col-md-9">
+											<div id="imgtab" style="display: flex; flex-wrap: wrap;" >
+												{volist name="picture_list" id="item" }
+												<div class="bkb1">
+													<div class="bkb2" onclick="delImg(this)">X</div>
+													<img height="200" width="200" src="{$base_dir . $item['picture']}">
+													<input type="hidden" name="thumb_url[]" value="{$item['picture']}">
+												</div>
+												{/volist}
+												<span id="tt"></span>
+											</div>
+											<div id="imgselect" ></div>
+											<div id="imglist">
+												<button type="button" id="imgupload">上传</button>
+												<span style="color:red;">温馨提示：多图上传,提交前先点击‘上传’,请勿多次点击</span>
+											</div>
+											<input type="hidden" id="delimg" name="delimg" value="">
+										</div>
+								</div>
+                                <div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 发布信息介绍 </label>
+									</div>
+									<div  class="form-group">
+								
+										<div style='width:55%;margin:0 auto;'>
+										    <script type="text/javascript" charset="utf-8" src="__STATIC__/utf8-php/ueditor.config.js"></script>
+										    <script type="text/javascript" charset="utf-8" src="__STATIC__/utf8-php/ueditor.all.min.js"> </script>
+										    <script type="text/javascript" charset="utf-8" src="__STATIC__/utf8-php/lang/zh-cn/zh-cn.js"></script>
+												<div>
+												    <script id="editor" type="text/plain" name='content' style="width:100%;height:300px;">{$list.content}</script>
+												</div>
+											<script type="text/javascript">
+											    var ue = UE.getEditor('editor');
+											</script>
+
+	                                    </div>
+								    </div>
+								<div class="space-4"></div>	
+								<div class="clearfix form-actions">
+									<div class="col-md-offset-3 col-md-9">
+										<button class="btn btn-info" type="submit" id='dian'>
+											<i class="icon-ok bigger-110"></i>
+											提交
+										</button>
+										&nbsp; &nbsp; &nbsp;
+										<a href="{:url('info/index')}">
+										<button class="btn" id = 'button' type='button'>
+
+											<i class="icon-undo bigger-110"></i>
+											返回
+										</button>
+										</a>
+										
+									</div>
+								</div>
+							</form>
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+					</div>
+<script src="__STATIC__/js/tinyImgUpload.js"></script>
+<script type="text/javascript">
+    var options = {
+        url: "{:url('upload/imgUpload')}",
+        path:'info',
+        onSuccess: function (res) {
+            data = eval('(' + res + ')');
+            if(data.code==1) {
+                alert('图片上传成功');
+                $('.img-thumb').each(function(){
+                    $(this).remove();
+                });
+                html = '';
+                for(var i=0;i<data.data.length;i++) {
+                    html += '<div class="bkb1"><div class="bkb2" onclick="delImg(this)">X</div>';
+                    html += '<img height="200" width="200" src="'+"{$base_dir}"+data.data[i]+'" ><input type="hidden" name="thumb_url[]" value="'+data.data[i]+'"></div>';
+                }
+                $('#tt').before(html);
+
+            } else {
+                alert('图片上传失败');
+            }
+        },
+        onFailure: function (res) {
+            alert('网络繁忙，请稍后再试');
+        }
+    };
+    var upload = tinyImgUpload('#imgselect', options);
+    var uploadImg = tinyImgUpload('#imgselect', options);
+    $('#imgselect').onclick = function (e) {
+        upload();
+    }
+    $('#imgupload').click(function(e){
+        uploadImg();
+    })
+
+
+    function delImg(obj)
+    {
+        var delimg = $('#delimg').val();
+        console.log(1,delimg);
+        var add_delimg = $(obj).next().attr('src');
+        if( delimg == "") {
+            $('#delimg').val(add_delimg);
+        } else {
+            delimg += ','+add_delimg;
+            $('#delimg').val(delimg);
+        }
+        $(obj).parent().remove();
+    }
+
+</script>
+<script>
+	  $('#one_cat_id').change(function(){
+
+        var one_cat_id = $('select[name="one_cat_id"]').val();
+
+        var url = "{:url('info/getCatList')}";
+        $.ajax({
+            type:'post',
+            url:url,
+            data:{'one_cat_id':one_cat_id},
+            success: function(res){
+                if (res) {
+                    html = '<option value="">请选择</option>';
+                    $(res.two_cat_list).each(function(index,element){
+                        html += '<option value="'+element.cat_id+'">'+element.name+'</option>';
+                    });
+                    $('#two_cat_id').html(html);
+                }
+            },
+            error:function(){
+                alert("服务器繁忙, 请联系管理员!");
+            }
+        });
+    });
+
+</script>
+
+{/block}

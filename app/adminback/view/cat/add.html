@@ -1,0 +1,116 @@
+{extend name="Base/index" /} 
+{block name='title'}
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="{:url('index/index')}">首页</a>
+							</li>
+
+							<li>
+								展示
+							</li>
+							<li class="active"><a href="{:url('cat/index')}">分类</a></li>
+						</ul><!-- .breadcrumb -->
+{/block}
+{block name='search'}{/block}
+{block name='content'}
+
+<div class="page-content">
+						<div class="page-header">
+							<h1>
+								展示
+								<small>
+									<i class="icon-double-angle-right"></i>
+									添加分类
+								</small>
+							</h1>
+						</div><!-- /.page-header -->
+
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+
+								<form class="form-horizontal" role="form" enctype ="multipart/form-data" action="{:url('cat/add')}" method='post' id="oForm">
+						
+									<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 使用位置 </label>
+										<div class="col-sm-9">
+											<select name="type" >
+												<option value="0">请选择</option>
+												<option value="1">首页</option>
+												<option value="2">商家页</option>
+											</select>
+                      <span id = 'span' ></span>
+										</div>
+									</div>
+
+					                 <div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 分类名</label>
+  										<div class="col-sm-9">
+  										 <input type="text" name="name" id="name"/>
+  										
+										</div>	
+									</div>
+									<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 子分类名</label>
+  										<div class="col-sm-9">
+	  										<div id="org" style="width: 163px">
+
+	  											<input type='text' name="type_name[]" calss='git' step="margin-top:10px" />
+	  										</div>
+	                                        <input  type="button" onclick="add1();" value="添加子分类" />
+	 
+										</div>	
+	
+									</div>
+									<script type="text/javascript">
+										function add1(){
+										    var input1 = document.createElement('input');
+										    input1.setAttribute('type', 'text');
+										    input1.setAttribute('name', 'type_name[]');
+										    input1.setAttribute('class', 'git');
+										    input1.setAttribute('value', '');
+										    input1.setAttribute('style', 'margin-top:10px');
+										    var btn1 = document.getElementById("org");
+										    btn1.insertBefore(input1,null);
+										}
+									</script> 
+									<!-- <div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> </label>
+  										<div class="col-sm-9">
+  										 <span style="color:red;">(温馨提示：多个子分类添加请按照示例‘子分类1-子分类2-子分类3’添加)</span>
+										</div>	
+									</div> -->
+									<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 上传图片</label>
+  										<div class="col-sm-9">
+  										 <input type="file" name="file" id="file"/>
+  											<img alt=""  id="img" width='150px' >
+										</div>	
+									</div>
+									<div class="space-4"></div>	
+									<div class="clearfix form-actions">
+										<div class="col-md-offset-3 col-md-9">
+											<button class="btn btn-info" type="submit" id='dian'>
+												<i class="icon-ok bigger-110"></i>
+												提交
+											</button>
+                </form>
+											&nbsp; &nbsp; &nbsp;
+											<a href="{:url('cat/index')}">
+											<button class="btn" id = 'button' type='button'>
+
+												<i class="icon-undo bigger-110"></i>
+												返回
+											</button>
+											</a>
+											
+										</div>
+									</div>
+	
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+					</div>
+
+
+{/block}

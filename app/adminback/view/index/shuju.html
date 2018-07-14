@@ -1,0 +1,40 @@
+{extend name="Base/index" /} 
+{block name='title'}
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="{:url('index/index')}">首页</a>
+							</li>
+
+							<li>
+								数据
+							</li>
+							<li class="active"><a href="{:url('index/shuju')}">数据分析</a></li>
+						</ul><!-- .breadcrumb -->
+{/block}
+
+{block name='content'}
+<script type="text/javascript" src="__STATIC__/common/js/jquery-1.7.2-min.js"></script>
+<script type="text/javascript" src="__STATIC__/common/js/echarts.min.js"></script>
+
+<div class="page-content">
+<div style='width:100%;margin:0 auto;'>
+<div id="test2" style="width:100%;height:492px;"></div>
+<script type="text/javascript" src="__STATIC__/liuliu/js/test2.js"></script>
+</div>
+<div class='col-sm-7' >
+<div id="test3" style="width:100%;height:492px;"></div>
+<script type="text/javascript" src="__STATIC__/liuliu/js/test3.js"></script>
+</div>
+<div class='col-sm-5' >
+<div id="pic" style="width:100%;height:492px;"></div>
+<script type="text/javascript" src="__STATIC__/liuliu/js/pic.js"></script>
+</div>
+
+<div style='width:100%;margin:0 auto;'>
+<div id="test" style="width:100%;height:492px;"></div>
+<script type="text/javascript" src="__STATIC__/liuliu/js/test.js"></script>
+</div>
+</div>
+
+{/block}
